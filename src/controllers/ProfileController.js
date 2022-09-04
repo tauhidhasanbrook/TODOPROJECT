@@ -1,5 +1,5 @@
 const ProfileModel = require('../models/ProfileModel')
-
+const jwt = require('jsonwebtoken');
 
 // User Registration
 exports.UserRegistration = (req, res) => {
@@ -25,6 +25,12 @@ exports.UserLogin = (req, res) => {
         if (err) {
             res.status(401).json({ status: "401 Unauthorized", data: err });
         } else {
+            let Payload = {
+                exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
+                data: data,
+            }
+            let Token = jwt.sign(Payload, "Tauhid3965#", { algorithm: 'RS256' })
+
             if (data.length > 0) {
                 res.status(200).json({ status: "OK", data: data })
             } else {
